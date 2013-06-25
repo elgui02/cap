@@ -1,0 +1,163 @@
+---
+detect_relations: true
+options:
+  collate: latin1_swedish_ci
+  charset: latin1
+  type: InnoDB
+
+jobeetAffiliate:
+  tableName: jobeet_affiliate
+  columns:
+    id:
+      type: integer(8)
+      primary: true
+      notnull: true
+      autoincrement: true
+    url:
+      type: string(255)
+      notnull: true
+    email:
+      type: string(255)
+      unique: true
+      notnull: true
+    token:
+      type: string(255)
+      notnull: true
+    is_active:
+      type: integer(1)
+      notnull: true
+      default: '0'
+    created_at:
+      type: timestamp
+      notnull: true
+    updated_at:
+      type: timestamp
+      notnull: true
+  options:
+    charset: latin1
+
+jobeetCategory:
+  tableName: jobeet_category
+  columns:
+    id:
+      type: integer(8)
+      primary: true
+      notnull: true
+      autoincrement: true
+    name:
+      type: string(255)
+      unique: true
+      notnull: true
+    created_at:
+      type: timestamp
+      notnull: true
+    updated_at:
+      type: timestamp
+      notnull: true
+  options:
+    charset: latin1
+
+jobeetCategoryAffiliate:
+  tableName: jobeet_category_affiliate
+  columns:
+    category_id:
+      type: integer(8)
+      primary: true
+      notnull: true
+      default: '0'
+    affiliate_id:
+      type: integer(8)
+      primary: true
+      notnull: true
+      default: '0'
+  relations:
+    affiliate:
+      class: jobeetAffiliate
+      local: affiliate_id
+      foreign: id
+      foreignAlias: jobeet_category_affiliates
+      onDelete: cascade
+    category:
+      class: jobeetCategory
+      local: category_id
+      foreign: id
+      foreignAlias: jobeet_category_affiliates
+      onDelete: cascade
+  indexes:
+    jobeet_category_affiliate_idx:
+      fields: [affiliate_id]
+  options:
+    charset: latin1
+
+jobeetJob:
+  tableName: jobeet_job
+  columns:
+    id:
+      type: integer(8)
+      primary: true
+      notnull: true
+      autoincrement: true
+    category_id:
+      type: integer(8)
+      notnull: true
+    type:
+      type: string(255)
+      default: null
+    company:
+      type: string(255)
+      notnull: true
+    logo:
+      type: string(255)
+      default: null
+    url:
+      type: string(255)
+      default: null
+    position:
+      type: string(255)
+      notnull: true
+    location:
+      type: string(255)
+      notnull: true
+    description:
+      type: clob(16777215)
+      notnull: true
+    how_to_apply:
+      type: clob(16777215)
+      notnull: true
+    token:
+      type: string(255)
+      unique: true
+      notnull: true
+    is_public:
+      type: integer(1)
+      notnull: true
+      default: '1'
+    is_activated:
+      type: integer(1)
+      notnull: true
+      default: '0'
+    email:
+      type: string(255)
+      notnull: true
+    expires_at:
+      type: timestamp
+      notnull: true
+    created_at:
+      type: timestamp
+      notnull: true
+    updated_at:
+      type: timestamp
+      notnull: true
+  relations:
+    category:
+      class: jobeetCategory
+      local: category_id
+      foreign: id
+      foreignAlias: jobeet_jobs
+      onDelete: cascade
+  indexes:
+    category_id_idx_idx:
+      fields: [category_id]
+  options:
+    charset: latin1
+
